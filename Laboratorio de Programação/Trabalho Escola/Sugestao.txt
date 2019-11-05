@@ -1,0 +1,10 @@
+Proposta de Organização Projeto Escola
+
+1 - Criar 1 arquivo para cada funcionalidade - Aluno, Professor, Disciplina
+2 - Criar 1 arquivo principal que é o menu que invoca os outros arquivos
+3 - No arquivo principal fazer apenas as chamadas para geração de relatório
+4 - Cada funcionalidade do relatório deve ser inserido em seu arquivo de referência 
+5 - Optem pela modularização para simplificar o código
+6 - Optem pelo padrão camel case para nomear variáveis: nomeVariavel
+7 - Optem pelo padrão pascal case para nomear os métodos ou funções ou módulos: NomeFuncao
+8 - Busquem nomear funções e variáveis com o nome mais próximo do objetivo dela
