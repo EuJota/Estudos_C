@@ -12,7 +12,7 @@ typedef struct stPessoa {
 } Pessoa;
 
 main(){
-	// todo esse código será alterado para funçoes
+	// todo esse cï¿½digo serï¿½ alterado para funï¿½oes
 	int opcao, tn=0, retorno=0;
 	char search[sizeName];
 	char optionList;
@@ -30,7 +30,7 @@ main(){
 		
 		printf("\nInforme sua opcao: ");
 		scanf("%d",&opcao);
-		getchar(); //limpeza de buffer - procurar opção melhor pra corrigir isso aqui
+		getchar(); //limpeza de buffer - procurar opï¿½ï¿½o melhor pra corrigir isso aqui
 		switch(opcao){
 			case 0:
 				printf("Finalizando");
@@ -86,7 +86,7 @@ main(){
 				printf("Deseja listar por nome tecle a, deseja listar por idade tecle b: ");
 				scanf("%c",&optionList);
 					if(optionList=='a'){
-						//para organizar por idade é só considerar as letras como string e comparar
+						//para organizar por idade ï¿½ sï¿½ considerar as letras como string e comparar
 					}else if(optionList=='b'){			
 					printf("Listando por idade crescente: \n");
 						for(int i=0;i<size;i++){
