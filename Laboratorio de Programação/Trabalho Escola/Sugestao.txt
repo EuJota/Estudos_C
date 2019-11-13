@@ -8,3 +8,10 @@ Proposta de Organização Projeto Escola
 6 - Optem pelo padrão camel case para nomear variáveis: nomeVariavel
 7 - Optem pelo padrão pascal case para nomear os métodos ou funções ou módulos: NomeFuncao
 8 - Busquem nomear funções e variáveis com o nome mais próximo do objetivo dela
+
+
+tarefas - 
+inserir aluno/professor em Disciplina
+excluir aluno/professor em Disciplina
+listar disciplina com alunos 
+excluir disciplina
