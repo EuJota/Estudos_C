@@ -2,15 +2,20 @@
 #include<string.h>
 #include "professor.h"
 #include "aluno.h"
-#define size 2
+#define sizeCode 4
+#define sizeName 25
+#define sizeTurma 40
 #define SUCESSO 1
+#define FALHA 0
 
 typedef struct disciplina{
-    char nomeDisciplina[25];
-    int codigo[size];
+    char nomeDisciplina[sizeName];
+    char codigo[sizeCode];
     int semestre;
-    char professor[50];
-    //alunos
+    int codigoProfessor;
+	int vagasTotal;
+	int qtdMatriculados;
+	int alunos[sizeTurma];
 } Disciplina;
 
 // int validadorDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[], int retornos[]){
@@ -24,29 +29,42 @@ typedef struct disciplina{
 //     }
 // }
 
-int cadastrarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas){
+int cadastrarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas){ 
 //cadastra disciplinas
-    //melhorar o algoritmo inserindo uma busca na lista para saber se já existe o codigo
     //chamar o algoritmo de lista disciplina
-    for (int i = 0; i < qtdDisciplinas; i++){
-        printf("\nInforme o nome da disciplina: ");
-        fgets(listaDisciplinas[i].nomeDisciplina, 25, stdin);
-        printf("\nInforme o codigo da disciplina: ");
-        fgets(listaDisciplinas[i].codigo, 10, stdin);
-        printf("\nInforme o semestre: ");
-        scanf("%d", &listaDisciplinas[i].semestre);
-        getchar();
-    }
-    return SUCESSO;
+	char codigo[sizeCode];
+	
+	printf("\nInforme o codigo da disciplina");
+	fgets(codigo, sizeCode, stdin);
+
+	for (int i = 0; i < qtdDisciplinas; i++)	//verifica se exite disciplina com o codigo
+		if (strcmp(codigo, listaDisciplinas[i].codigo) == 0) {			
+			printf("\nErro - ja existe disciplina cadastrada com esse codigo.");
+			return FALHA;
+		}
+
+	strcpy(listaDisciplinas[qtdDisciplinas].codigo, codigo);
+	printf("\nInforme o nome da disciplina: ");
+	fgets(listaDisciplinas[qtdDisciplinas].nomeDisciplina, sizeName, stdin);
+	printf("\nInforme o codigo do Professor responsavel: ");
+	scanf("%d",&listaDisciplinas[qtdDisciplinas].codigoProfessor);
+	printf("\nInforme o semestre: ");
+	scanf("%d", &listaDisciplinas[qtdDisciplinas].semestre);
+	listaDisciplinas[qtdDisciplinas].vagasTotal = sizeTurma;
+	listaDisciplinas[qtdDisciplinas].qtdMatriculados = 0;
+	printf("\nEssa disciplina dispoe de %d vagas", sizeTurma);
+	getchar();
+    return SUCESSO; //lembrar de incrementar qtdDisciplinas no main
 }
 
 void listarDisciplinas(Disciplina listaDisciplinas[], int qtdDisciplinas){
 //lista todas as disciplinas
     for(int i =0; i<qtdDisciplinas;i++){
-        printf("Disciplina: %s | Codigo: %s | Semestre: %d\n",
+        printf("\nDisciplina: %s | Codigo: %s | Semestre: %d | Vagas Disponiveis: %d \n",
         listaDisciplinas[i].nomeDisciplina,
         listaDisciplinas[i].codigo,
-        listaDisciplinas[i].semestre);
+        listaDisciplinas[i].semestre,
+		listaDisciplinas[i].vagasTotal - listaDisciplinas[i].qtdMatriculados);
     }
 }
 
@@ -56,10 +74,13 @@ void listarUmaDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char
     // nao gostei desse codigo, tentar fazer depois sem a funcao strcmp
     for(int i=0;i<qtdDisciplinas;i++){
         if(strcmp(codDisciplina,listaDisciplinas[i].codigo) == 0){
-            printf("Disciplina: %s | Codigo: %s |  Semestre: %d",
-            listaDisciplinas[i].nomeDisciplina, 
-            listaDisciplinas[i].codigo,
-            listaDisciplinas[i].semestre);
+			printf("\nDisciplina: %s | Codigo: %s | Semestre: %d | Vagas Ofertadas: %d | Matriculados: %d | Vagas Disponiveis: %d \n",
+				listaDisciplinas[i].nomeDisciplina,
+				listaDisciplinas[i].codigo,
+				listaDisciplinas[i].semestre,
+				listaDisciplinas[i].vagasTotal,
+				listaDisciplinas[i].qtdMatriculados,
+				listaDisciplinas[i].vagasTotal - listaDisciplinas[i].qtdMatriculados);
             existe = 1;
             break;
         }else{
@@ -68,16 +89,30 @@ void listarUmaDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char
     }
 
     if(!existe)
-        printf("Disciplina nao encontrada");
+        printf("\nDisciplina nao encontrada");
 }
 
-void excluirDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[]){
-//função ainda nao pronto, falta excluir a disciplina
-    int caso = validadorDisciplina(listaDisciplinas, qtdDisciplinas, codDisciplina);
-    
-    if(caso==1){
-        //excluir
-    }
+int excluirDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[]){
+    int j, i;
+	for (i = 0; i < qtdDisciplinas; i++){
+		if (strcmp(codDisciplina, listaDisciplinas[i].codigo) == 0) { 
+			//copia a ultima disciplina do array pra a posicao da excluida
+			strcpy(listaDisciplinas[i].nomeDisciplina, listaDisciplinas[qtdDisciplinas - 1].nomeDisciplina);
+			strcpy(listaDisciplinas[i].codigo, listaDisciplinas[qtdDisciplinas - 1].codigo);
+				
+			listaDisciplinas[i].codigoProfessor=listaDisciplinas[qtdDisciplinas - 1].codigoProfessor;
+			listaDisciplinas[i].qtdMatriculados=listaDisciplinas[qtdDisciplinas - 1].qtdMatriculados;
+			listaDisciplinas[i].vagasTotal=listaDisciplinas[qtdDisciplinas - 1].vagasTotal;
+			listaDisciplinas[i].semestre = listaDisciplinas[qtdDisciplinas - 1].semestre;
+			for (j = 0; j < sizeTurma; j++)
+				listaDisciplinas[i].alunos[j] = listaDisciplinas[qtdDisciplinas - 1].alunos[j];
+
+			//listaDisciplinas[qtdDisciplinas - 1] = NULL; //esvazia a ultima posicao do array
+			return SUCESSO;
+			}
+		}
+	
+	return FALHA;
 }
 
 void atualizarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[]){
@@ -85,32 +120,36 @@ void atualizarDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char
     for(int i=0;i<qtdDisciplinas;i++){
         if(strcmp(codDisciplina, listaDisciplinas[i].codigo)==0){
             printf("\nInforme o novo nome da disciplina: ");
-            fgets(listaDisciplinas[i].nomeDisciplina, 25, stdin);
+            fgets(listaDisciplinas[i].nomeDisciplina, sizeName, stdin);
             printf("\nInforme o novo codigo da disciplina: ");
-            fgets(listaDisciplinas[i].codigo, 10, stdin);
+            fgets(listaDisciplinas[i].codigo, sizeCode, stdin);
             printf("\nInforme o novo semestre: ");
             scanf("%d",&listaDisciplinas[i].semestre);
-            getchar();
+            getchar(); 
             printf("Atualizado");
         }
     }
 }
 
-int inserirAlunoDisciplina(Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[]){
+int inserirAlunoDisciplina(int matricula,Disciplina listaDisciplinas[], int qtdDisciplinas, char codDisciplina[]){
 //inserir aluno na disciplina
-    int numAlunos, j;
-
-    printf("Quantos alunos deseja inserir? ");
-    scanf("%d", &numAlunos);
-
-    for (j = 0; j < numAlunos; j++)
-    {
-        printf("Informe o nome do aluno: ");
-        //fgets(listaDisciplinas[i].alunos[j],50, stdin);
-        //chamar uma função que verifica se existe a disciplina a partir do código e que ela retorne a posição que se
-        //encontra no vetor
-        //chamar a função de existe aluno pra verificar se o aluno já existe no vetor de alunos
-    }
+	int i,j;
+	printf("Quantos alunos deseja inserir? ");	
+	for (i = 0; i > qtdDisciplinas; i++) {
+		if (strcmp(codDisciplina, listaDisciplinas[i].codigo) == 0) {
+			if ((listaDisciplinas[i].vagasTotal - listaDisciplinas[i].qtdMatriculados) < 1) { //verifica se a turma esta lotada
+				printf("\nNao ha vaga na disciplina.");
+                return FALHA;
+			}
+			else {
+				listaDisciplinas[i].alunos[listaDisciplinas[i].qtdMatriculados] = matricula;
+				listaDisciplinas[i].qtdMatriculados++;
+				printf("\nO aluno foi matriculado com sucesso!");
+                return SUCESSO;
+			}
+		}
+	
+	}
 }
 
 void excluirAlunoDisciplina(Disciplina listaDisciplinas[], char codDisciplina[], char nomeAluno[]){
@@ -134,7 +173,7 @@ void excluirAlunoDisciplina(Disciplina listaDisciplinas[], char codDisciplina[],
 
 main(){ //alterar esse metodo para o metodo cadastro (inserir, excluir, atualizar)
 Disciplina disciplina;
-Disciplina listaDisciplinas[size];
+Disciplina listaDisciplinas[sizeCode];
 int op, ts, existe = 1, retorno;
 
 do{
@@ -149,29 +188,29 @@ do{
 
     switch(op){
         case 1:
-            cadastrarDisciplina(listaDisciplinas, size);
+            cadastrarDisciplina(listaDisciplinas, sizeCode);
             if(retorno == SUCESSO)
                 printf("\nDisciplina cadastrada com sucesso\n");
         break;
 
         case 2:
             printf("\nInforme o codigo da disciplina para excluir: ");
-            excluirDisciplina(listaDisciplinas, size, fgets(disciplina.codigo,10,stdin));
+            excluirDisciplina(listaDisciplinas, sizeCode, fgets(disciplina.codigo,10,stdin));
 
         break;
 
         case 3:
             printf("Informe o codigo da disciplina: ");
-            atualizarDisciplina(listaDisciplinas, size, fgets(disciplina.codigo, 10, stdin));      
+            atualizarDisciplina(listaDisciplinas, sizeCode, fgets(disciplina.codigo, 10, stdin));      
         break;
 
         case 4:
-            listarDisciplinas(listaDisciplinas, size);
+            listarDisciplinas(listaDisciplinas, sizeCode);
         break;
 
         case 5:
             printf("Informe o codigo da disciplina: ");
-            listarUmaDisciplina(listaDisciplinas, size, fgets(disciplina.codigo, 10, stdin));
+            listarUmaDisciplina(listaDisciplinas, sizeCode, fgets(disciplina.codigo, 10, stdin));
         break;
 
         case 0:
