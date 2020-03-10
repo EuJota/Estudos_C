@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define TAM 10
-
-
 #include "EstruturaVetores.h"
 
-int vetorPrincipal[TAM] = {0,1,2,3,4,5,6,7,8,9};
+typedef struct{
+    int *listaAuxiliar;
+} ListaAux;
+
+ListaAux vetorPrincipal[TAM];
 
 int verificaEstrutura(int *ptrLista){
     printf("%p",ptrLista);
@@ -105,7 +107,7 @@ int excluirNumeroDoFinaldaEstrutura(int posicao){
   return retorno;
 }
 
-/*
+/*S
 Objetivo: excluir o numero 'valor' da estrutura auxiliar da posição 'posicao'.
 Caso seja excluido, os números posteriores devem ser movidos para as posições anteriores
 ex: suponha os valores [3, 8, 7, 9,  ,  ] onde deve ser excluido o valor 8. A estrutura deve ficar da seguinte forma [3, 7, 9,  ,  ,  ]
