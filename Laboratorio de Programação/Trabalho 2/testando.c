@@ -110,7 +110,7 @@ int getQuantidadeElementosEstruturaAuxiliar(int posicao){
             if(ptrListaPrincipal->cont > 0)
                 retorno = ptrListaPrincipal->cont;
             else
-                return ESTRUTURA_AUXILIAR_VAZIA;
+                retorno = ESTRUTURA_AUXILIAR_VAZIA;
         else
             retorno = SEM_ESTRUTURA_AUXILIAR;
     else
@@ -190,9 +190,9 @@ void selectionSort(int lista[], int n){
         }
     }
 
-    printf("Pegando lista auxiliar ordenada: ");
-    for(i=0;i<n;i++)
-        printf("%d ",lista[i]);
+    // printf("Pegando lista auxiliar ordenada: ");
+    // for(i=0;i<n;i++)
+    //     printf("%d ",lista[i]);
 }
 
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
@@ -209,8 +209,11 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
             for(j=0;j<tj;j++)
                 vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
             
-            for(j=0;j<tj;j++)
-                printf("%d =>",vetorAux[j]);
+            // printf("\n");
+            // for(j=0;j<tj;j++)
+            //     printf("%d =>",vetorAux[j]);
+
+            // printf("\n");
             retorno = SUCESSO;
         }else{
             retorno = SEM_ESTRUTURA_AUXILIAR;
@@ -223,21 +226,39 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
 
 int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]){
 
-    int retorno = 0, i, j, tj;
+    int retorno = 0, contadorGeral = 0, i, x=0, j, k, tamanhoListasAuxiliares, tj;
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
 
+    for(i=0; i<10;i++)
+        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
+    
+    vetorAux[contadorGeral]; //É O MESMO QUE DAR UM MALLOC?
+
+    for(k=0;k<10;k++)
+        for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
+            for(i=x;i<contadorGeral;i++){
+                vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
+                x++;
+                break;
+            }
+
     for(i=0;i<10;i++){
         tj = ptrListaPrincipal[i].tamanho;
-        printf("\nPosicao %d: Lista Auxiliar de tamanho: %d",(i+1), tj);
-        if(tj>0)
-            printf("\t--- Lista: ");
+        //printf("\nPosicao %d: Lista Auxiliar de tamanho: %d",(i+1), tj);
+        if(tj>0){
+            //printf("\t--- Lista: ");
+            retorno = SUCESSO;
+        }
         for(j=0; j<tj;j++){
-            printf("%d => ",ptrListaPrincipal[i].listaAuxiliar[j]);
+            //printf("%d => ",ptrListaPrincipal[i].listaAuxiliar[j]);
         }
     }
 
-    return retorno;
+    if(retorno == SUCESSO)
+        return retorno;
+    else
+        return SEM_ESTRUTURA_AUXILIAR;
 
 }
 
@@ -247,14 +268,15 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]){
     ptrListaPrincipal = &vetorPrincipal;
 
     if(ehPosicaoValida(posicao) == SUCESSO)
-        if(verificarEstruturaAuxiliar(posicao) == SUCESSO){
-            tj = ptrListaPrincipal[posicao].tamanho;
+        if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
+            tj = ptrListaPrincipal[posicao].cont;
             vetorAux[tj];
 
             for(j=0;j<tj;j++)
                 vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
+   
+            selectionSort(vetorAux, tj);   
 
-            selectionSort(vetorAux, tj);
             retorno = SUCESSO;
         }else
             retorno = SEM_ESTRUTURA_AUXILIAR;
@@ -281,12 +303,18 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]){
         for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
             for(i=x;i<contadorGeral;i++){
                 vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
+                if(ptrListaPrincipal[k].listaAuxiliar != NULL)
+                    retorno = SUCESSO;
                 x++;
                 break;
             }
     selectionSort(vetorAux, contadorGeral);
 
-    return retorno;
+
+    if(retorno == SUCESSO)
+        return retorno;
+    else
+        return SEM_ESTRUTURA_AUXILIAR;
 }
 
 void ordenarEstruturaAuxiliarPosRemocao(int posicaoPrincipal, int posicaoAuxiliar){
@@ -322,32 +350,36 @@ int excluirNumeroEspecificoDeEstrutura(int valor, int posicao){
 }
 
 int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho){
-    int retorno = 0;
+    int retorno = 0, tamanhoAtual = 0;
 
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
+    
+    tamanhoAtual = ptrListaPrincipal[posicao].tamanho;
 
-    if(ehPosicaoValida(posicao) == SUCESSO)
-        if(novoTamanho > ptrListaPrincipal[posicao].tamanho){
-            if(ptrListaPrincipal[posicao].listaAuxiliar == NULL){
-                retorno = SEM_ESTRUTURA_AUXILIAR;
-            }else{
-                novoTamanho = ptrListaPrincipal[posicao].tamanho + novoTamanho;
-                ptrListaPrincipal[posicao].listaAuxiliar = realloc(ptrListaPrincipal[posicao].listaAuxiliar , sizeof(int *)*novoTamanho);
-                if(ptrListaPrincipal[posicao].listaAuxiliar == NULL)
-                    retorno = SEM_ESPACO_DE_MEMORIA;
-                else{
-                    ptrListaPrincipal[posicao].tamanho = novoTamanho;
-                    retorno = SUCESSO;
-                }        
-            }
-        }else{
-            retorno = NOVO_TAMANHO_INVALIDO;
-        }
-    else
+    if(ehPosicaoValida(posicao) != SUCESSO)
         return POSICAO_INVALIDA;
 
-    return retorno;
+    if((tamanhoAtual + novoTamanho) <= 0)
+        return NOVO_TAMANHO_INVALIDO;
+
+    if(ptrListaPrincipal[posicao].listaAuxiliar == NULL)
+        return SEM_ESTRUTURA_AUXILIAR;
+    else{
+        novoTamanho += tamanhoAtual;
+        ptrListaPrincipal[posicao].listaAuxiliar = (int *) realloc(ptrListaPrincipal[posicao].listaAuxiliar, novoTamanho * sizeof(int *));
+        
+        if(ptrListaPrincipal[posicao].listaAuxiliar == NULL)
+            return SEM_ESPACO_DE_MEMORIA;
+        else{
+            ptrListaPrincipal[posicao].tamanho = novoTamanho;
+            if(ptrListaPrincipal[posicao].cont > novoTamanho)
+                ptrListaPrincipal[posicao].cont = novoTamanho;
+            return SUCESSO;
+        }
+    }  
+
+    return retorno;   
 }
 
 int  excluirNumeroDoFinaldaEstrutura(int posicao){
@@ -375,56 +407,82 @@ int  excluirNumeroDoFinaldaEstrutura(int posicao){
   return retorno;
 }
 
-main(){
-    int tamanho, posicao, retorno, i,j;
-    int vetAux[0];
+// main(){
+//     int tamanho, posicao, retorno, i,j;
+//     int vetAux[0];
 
-    inicializar();
+//     inicializar();
 
-    printf("%d\n",criarEstruturaAuxiliar(5, -2) == POSICAO_INVALIDA);
-    printf("%d\n",criarEstruturaAuxiliar(5, 0) == POSICAO_INVALIDA);
-    printf("%d\n",criarEstruturaAuxiliar(5, 11) == POSICAO_INVALIDA);
-    printf("%d\n",criarEstruturaAuxiliar(-5, 2) == TAMANHO_INVALIDO);
-    printf("%d\n",criarEstruturaAuxiliar(0, 2) == TAMANHO_INVALIDO);
-    printf("%d\n",criarEstruturaAuxiliar(3, 2) == SUCESSO);
-    printf("%d\n",criarEstruturaAuxiliar(6, 2) == JA_TEM_ESTRUTURA_AUXILIAR);
+//     printf("%d\n",criarEstruturaAuxiliar(5, -2) == POSICAO_INVALIDA);
+//     printf("%d\n",criarEstruturaAuxiliar(5, 0) == POSICAO_INVALIDA);
+//     printf("%d\n",criarEstruturaAuxiliar(5, 11) == POSICAO_INVALIDA);
+//     printf("%d\n",criarEstruturaAuxiliar(-5, 2) == TAMANHO_INVALIDO);
+//     printf("%d\n",criarEstruturaAuxiliar(0, 2) == TAMANHO_INVALIDO);
+//     printf("%d\n",criarEstruturaAuxiliar(3, 2) == SUCESSO);
+//     printf("%d\n",criarEstruturaAuxiliar(6, 2) == JA_TEM_ESTRUTURA_AUXILIAR);
 
-    printf("%d\n",inserirNumeroEmEstrutura(4, 2) == SUCESSO);
-    printf("%d\n",inserirNumeroEmEstrutura(-2, 2) == SUCESSO);
-    printf("%d\n",inserirNumeroEmEstrutura(6, 2) == SUCESSO);
-    printf("%d\n",inserirNumeroEmEstrutura(5, 2) == SEM_ESPACO);
+//     printf("%d\n",inserirNumeroEmEstrutura(4, 2) == SUCESSO);
+//     printf("%d\n",inserirNumeroEmEstrutura(-2, 2) == SUCESSO);
+//     printf("%d\n",inserirNumeroEmEstrutura(6, 2) == SUCESSO);
+//     printf("%d\n",inserirNumeroEmEstrutura(5, 2) == SEM_ESPACO);
 
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(0) == POSICAO_INVALIDA);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(1) == SEM_ESTRUTURA_AUXILIAR);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == ESTRUTURA_AUXILIAR_VAZIA);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(0) == POSICAO_INVALIDA);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(1) == SEM_ESTRUTURA_AUXILIAR);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == ESTRUTURA_AUXILIAR_VAZIA);
 
-    printf("%d\n",inserirNumeroEmEstrutura(7, 2) == SUCESSO);
-    printf("%d\n",inserirNumeroEmEstrutura(-9, 2) == SUCESSO);
+//     printf("%d\n",inserirNumeroEmEstrutura(7, 2) == SUCESSO);
+//     printf("%d\n",inserirNumeroEmEstrutura(-9, 2) == SUCESSO);
     
-    int vet[2];
+//     int vet[2];
 
-    printf("%d\n",getDadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-    printf("%d\n",getDadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
-    printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
+//     printf("%d\n",getDadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
+//     printf("%d\n",getDadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
+//     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
-    printf("%d\n",vet[0] == 7);
-    printf("%d\n",vet[1] == -9);
+//     printf("%d\n",vet[0] == 7);
+//     printf("%d\n",vet[1] == -9);
 
-    printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-    printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
-    printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO);
+//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
+//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
+//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO); 
 
-    printf("%d\n",vet[0] == -9);
-    printf("%d\n",vet[1] == 7);
+//     printf("%d\n",vet[0] == -9);
+//     printf("%d\n",vet[1] == 7);
 
-    printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
+//     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
-    printf("%d\n",vet[0] == 7);
-    printf("%d\n",vet[1] == -9);
+//     printf("%d\n",vet[0] == 7);
+//     printf("%d\n",vet[1] == -9);
     
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-}
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+
+//     printf("verificar: %d\n",getQuantidadeElementosEstruturaAuxiliar(2));
+
+// //     vet[1];
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -3) == NOVO_TAMANHO_INVALIDO);
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -4) == NOVO_TAMANHO_INVALIDO);
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(11, 7) == POSICAO_INVALIDA);
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(0, 7) == POSICAO_INVALIDA);
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(1, 7) == SEM_ESTRUTURA_AUXILIAR);
+    
+// //     //modificar para tamanho de 3 para 1
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -2)== SUCESSO);
+// //     printf("%d\n",getQuantidadeElementosEstruturaAuxiliar(2) == 1);
+// //     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
+// //     printf("%d\n",vet[0] == 3);
+
+// //     //modificar para tamanho de 1 para 4
+// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, 3)== SUCESSO);
+// //     printf("%d\n",getQuantidadeElementosEstruturaAuxiliar(2)== 1);
+// //     printf("%d\n",getDadosEstruturaAuxiliar(2, vet)== SUCESSO);
+// //     printf("%d\n",vet[0] == 3);
+
+// //     printf("%d\n",inserirNumeroEmEstrutura(4, 2)== SUCESSO);
+// //     printf("%d\n",inserirNumeroEmEstrutura(-2, 2)== SUCESSO);
+// //     printf("%d\n",inserirNumeroEmEstrutura(6, 2)== SUCESSO);
+// //     printf("%d\n",inserirNumeroEmEstrutura(5, 2) == SEM_ESPACO);
+// }

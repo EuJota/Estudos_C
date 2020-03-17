@@ -18,14 +18,14 @@ typedef struct reg {
 
 int criarEstruturaAuxiliar(int tamanho, int posicao); // OK - TESTAR
 int inserirNumeroEmEstrutura(int valor, int posicao); // OK - TESTAR
-// int excluirNumeroDoFinaldaEstrutura(int posicao); // OK - TESTAR
-// int excluirNumeroEspecificoDeEstrutura(int valor, int posicao); //OK
-// int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]); // OK
-// int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]);// OK
-// int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]); //O CODIGO FUNCIONA MAS OS RETORNOS AINDA GERAM DUVIDAS
-// int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]); //O CODIGO FUNCIONA MAS OS RETORNOS AINDA GERAM DUVIDAS
-// int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho);
-// int getQuantidadeElementosEstruturaAuxiliar(int posicao); // OK
+int excluirNumeroDoFinaldaEstrutura(int posicao); // OK - TESTAR
+int excluirNumeroEspecificoDeEstrutura(int valor, int posicao); //OK
+int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]); // OK
+int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]);// OK
+int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]); //O CODIGO FUNCIONA MAS OS RETORNOS AINDA GERAM DUVIDAS
+int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]); //O CODIGO FUNCIONA MAS OS RETORNOS AINDA GERAM DUVIDAS
+int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho);
+int getQuantidadeElementosEstruturaAuxiliar(int posicao); // OK
 // No* montarListaEncadeadaComCabecote();
 // void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]);
 // void destruirListaEncadeadaComCabecote(No* inicio);

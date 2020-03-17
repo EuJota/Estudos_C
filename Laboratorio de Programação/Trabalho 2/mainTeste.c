@@ -8,10 +8,10 @@ void show_log(char *str);
 void testeInserirSemNada();
 void testeCriarEstrutura();
 void testeInserirComEstrutura();
-//void testeExcluir();
-//void testeListar();
-//void testeRetornarTodosNumeros();
-//void testeMudarTamanhoEstrutura();
+void testeExcluir();
+void testeListar();
+void testeRetornarTodosNumeros();
+void testeMudarTamanhoEstrutura();
 //void testeListaEncadeada();
 
 
@@ -20,10 +20,10 @@ int main(){
     testeInserirSemNada();
     testeCriarEstrutura();
     testeInserirComEstrutura();
-    //testeExcluir();
-    //testeListar();
-    //testeRetornarTodosNumeros();
-    //testeMudarTamanhoEstrutura();
+    testeExcluir();
+    testeListar();
+    testeRetornarTodosNumeros();
+    testeMudarTamanhoEstrutura();
     //testeListaEncadeada();
     //finalizar();
 
