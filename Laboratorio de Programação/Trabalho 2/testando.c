@@ -201,19 +201,16 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
 
+    int len = sizeof(vetorAux)/sizeof(vetorAux[0]);
+    //printf("\n->%d / %d\n",sizeof(*vetorAux), sizeof(vetorAux[0]));
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
-            tj = ptrListaPrincipal[posicao].tamanho;
-            vetorAux[tj];
+            //tj = ptrListaPrincipal[posicao].tamanho;
+            //vetorAux[tj];
 
-            for(j=0;j<tj;j++)
+            for(j=0;j<len;j++)
                 vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
             
-            // printf("\n");
-            // for(j=0;j<tj;j++)
-            //     printf("%d =>",vetorAux[j]);
-
-            // printf("\n");
             retorno = SUCESSO;
         }else{
             retorno = SEM_ESTRUTURA_AUXILIAR;
@@ -232,6 +229,9 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]){
 
     for(i=0; i<10;i++)
         contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
+
+    if(contadorGeral == 0)
+        return SEM_ESTRUTURA_AUXILIAR;
     
     vetorAux[contadorGeral]; //É O MESMO QUE DAR UM MALLOC?
 
@@ -257,8 +257,6 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]){
 
     if(retorno == SUCESSO)
         return retorno;
-    else
-        return SEM_ESTRUTURA_AUXILIAR;
 
 }
 
@@ -269,10 +267,12 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]){
 
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
-            tj = ptrListaPrincipal[posicao].cont;
-            vetorAux[tj];
+            // tj = ptrListaPrincipal[posicao].cont;
+            // vetorAux[tj];
 
-            for(j=0;j<tj;j++)
+            int len = sizeof(vetorAux)/sizeof(int);
+
+            for(j=0;j<len;j++)
                 vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
    
             selectionSort(vetorAux, tj);   
@@ -407,82 +407,98 @@ int  excluirNumeroDoFinaldaEstrutura(int posicao){
   return retorno;
 }
 
-// main(){
-//     int tamanho, posicao, retorno, i,j;
-//     int vetAux[0];
+No* montarListaEncadeadaComCabecote(){
 
-//     inicializar();
+    int vetorAux[0], i, contadorGeral = 0, k,x ,j =0, cont = 0;
+    ListaAux *ptrListaPrincipal = NULL;
+    ptrListaPrincipal = &vetorPrincipal;
 
-//     printf("%d\n",criarEstruturaAuxiliar(5, -2) == POSICAO_INVALIDA);
-//     printf("%d\n",criarEstruturaAuxiliar(5, 0) == POSICAO_INVALIDA);
-//     printf("%d\n",criarEstruturaAuxiliar(5, 11) == POSICAO_INVALIDA);
-//     printf("%d\n",criarEstruturaAuxiliar(-5, 2) == TAMANHO_INVALIDO);
-//     printf("%d\n",criarEstruturaAuxiliar(0, 2) == TAMANHO_INVALIDO);
-//     printf("%d\n",criarEstruturaAuxiliar(3, 2) == SUCESSO);
-//     printf("%d\n",criarEstruturaAuxiliar(6, 2) == JA_TEM_ESTRUTURA_AUXILIAR);
+    No *inicio, *novo, *np;
+    inicio = (No*) malloc(sizeof(No*));
 
-//     printf("%d\n",inserirNumeroEmEstrutura(4, 2) == SUCESSO);
-//     printf("%d\n",inserirNumeroEmEstrutura(-2, 2) == SUCESSO);
-//     printf("%d\n",inserirNumeroEmEstrutura(6, 2) == SUCESSO);
-//     printf("%d\n",inserirNumeroEmEstrutura(5, 2) == SEM_ESPACO);
+    if(inicio == NULL)
+        return NULL;
 
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(0) == POSICAO_INVALIDA);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(1) == SEM_ESTRUTURA_AUXILIAR);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == ESTRUTURA_AUXILIAR_VAZIA);
-
-//     printf("%d\n",inserirNumeroEmEstrutura(7, 2) == SUCESSO);
-//     printf("%d\n",inserirNumeroEmEstrutura(-9, 2) == SUCESSO);
+    for(i=0; i<10;i++)
+        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
     
+    vetorAux[contadorGeral];
+
+    for(k=0;k<10;k++)
+        for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
+            for(i=x;i<contadorGeral;i++){
+                vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
+                x++;
+                break;
+            }
+
+    for(i=0;i<contadorGeral;i++){
+        if(inicio->prox == NULL){
+            novo = (No*) malloc(sizeof(No*));
+            inicio->prox = novo;
+            novo->conteudo = vetorAux[i];
+            novo->prox = NULL;
+            cont = 1;
+        }else{
+            novo = inicio;
+            while(novo->prox != NULL){
+                novo = novo->prox;
+            }
+            np = (No*) malloc(sizeof(No*));
+            np->conteudo = vetorAux[i];
+            np->prox = NULL;
+            novo->prox = np;
+        }
+    }
+
+    if(cont !=0)
+        return inicio;
+    else
+        return NULL;
+}
+
+void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
+    No *aux;
+    int i=0;
+
+    if(inicio != NULL){
+        aux = inicio;
+        while(aux != NULL){
+            vetorAux[i] = aux->conteudo;
+            printf("%d ->",vetorAux[i]);
+            i++;
+            aux = aux->prox;
+        }
+    }else{
+        printf("Lista vazia");
+    }
+}
+
+void destruirListaEncadeadaComCabecote(No* inicio){
+   No *aux;
+
+   if(inicio !=NULL){
+       aux = inicio;
+       while(aux != NULL){
+           aux = inicio->prox;
+           free(inicio);
+           inicio = aux;
+       }
+   }
+
+}
+
+void finalizar(){
+    
+    
+}
+
+// main(){
 //     int vet[2];
 
-//     printf("%d\n",getDadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-//     printf("%d\n",getDadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
-//     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
+//     printf("%d\n",getDadosEstruturaAuxiliar(2, vet));
 
-//     printf("%d\n",vet[0] == 7);
-//     printf("%d\n",vet[1] == -9);
-
-//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
-//     printf("%d\n",getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO); 
-
-//     printf("%d\n",vet[0] == -9);
-//     printf("%d\n",vet[1] == 7);
-
-//     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
-
-//     printf("%d\n",vet[0] == 7);
-//     printf("%d\n",vet[1] == -9);
     
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-//     printf("%d\n",excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+//     return 0;
 
-//     printf("verificar: %d\n",getQuantidadeElementosEstruturaAuxiliar(2));
-
-// //     vet[1];
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -3) == NOVO_TAMANHO_INVALIDO);
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -4) == NOVO_TAMANHO_INVALIDO);
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(11, 7) == POSICAO_INVALIDA);
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(0, 7) == POSICAO_INVALIDA);
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(1, 7) == SEM_ESTRUTURA_AUXILIAR);
-    
-// //     //modificar para tamanho de 3 para 1
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -2)== SUCESSO);
-// //     printf("%d\n",getQuantidadeElementosEstruturaAuxiliar(2) == 1);
-// //     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
-// //     printf("%d\n",vet[0] == 3);
-
-// //     //modificar para tamanho de 1 para 4
-// //     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, 3)== SUCESSO);
-// //     printf("%d\n",getQuantidadeElementosEstruturaAuxiliar(2)== 1);
-// //     printf("%d\n",getDadosEstruturaAuxiliar(2, vet)== SUCESSO);
-// //     printf("%d\n",vet[0] == 3);
-
-// //     printf("%d\n",inserirNumeroEmEstrutura(4, 2)== SUCESSO);
-// //     printf("%d\n",inserirNumeroEmEstrutura(-2, 2)== SUCESSO);
-// //     printf("%d\n",inserirNumeroEmEstrutura(6, 2)== SUCESSO);
-// //     printf("%d\n",inserirNumeroEmEstrutura(5, 2) == SEM_ESPACO);
 // }
