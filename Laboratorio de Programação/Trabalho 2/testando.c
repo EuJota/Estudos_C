@@ -105,7 +105,7 @@ int getQuantidadeElementosEstruturaAuxiliar(int posicao){
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal[posicao];
 
-    if(ehPosicaoValida(posicao) == SUCESSO)
+    if(ehPosicaoValida(posicao+1) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR)
             if(ptrListaPrincipal->cont > 0)
                 retorno = ptrListaPrincipal->cont;
@@ -228,10 +228,12 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]){
     ptrListaPrincipal = &vetorPrincipal;
 
     for(i=0; i<10;i++)
-        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
-
+        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0;
+    
     if(contadorGeral == 0)
-        return SEM_ESTRUTURA_AUXILIAR;
+        return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    else
+        retorno = SUCESSO;
     
     vetorAux[contadorGeral]; //É O MESMO QUE DAR UM MALLOC?
 
@@ -243,21 +245,7 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[]){
                 break;
             }
 
-    for(i=0;i<10;i++){
-        tj = ptrListaPrincipal[i].tamanho;
-        //printf("\nPosicao %d: Lista Auxiliar de tamanho: %d",(i+1), tj);
-        if(tj>0){
-            //printf("\t--- Lista: ");
-            retorno = SUCESSO;
-        }
-        for(j=0; j<tj;j++){
-            //printf("%d => ",ptrListaPrincipal[i].listaAuxiliar[j]);
-        }
-    }
-
-    if(retorno == SUCESSO)
-        return retorno;
-
+    return retorno;
 }
 
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]){
@@ -295,7 +283,12 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]){
     ptrListaPrincipal = &vetorPrincipal;
 
     for(i=0; i<10;i++)
-        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
+        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0;
+        
+    if(contadorGeral == 0)
+        return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    else
+        retorno = SUCESSO;
     
     vetorAux[contadorGeral]; //É O MESMO QUE DAR UM MALLOC?
 
@@ -303,18 +296,13 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]){
         for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
             for(i=x;i<contadorGeral;i++){
                 vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
-                if(ptrListaPrincipal[k].listaAuxiliar != NULL)
-                    retorno = SUCESSO;
                 x++;
                 break;
             }
     selectionSort(vetorAux, contadorGeral);
 
 
-    if(retorno == SUCESSO)
-        return retorno;
-    else
-        return SEM_ESTRUTURA_AUXILIAR;
+   return retorno;
 }
 
 void ordenarEstruturaAuxiliarPosRemocao(int posicaoPrincipal, int posicaoAuxiliar){
@@ -409,7 +397,8 @@ int  excluirNumeroDoFinaldaEstrutura(int posicao){
 
 No* montarListaEncadeadaComCabecote(){
 
-    int vetorAux[0], i, contadorGeral = 0, k,x ,j =0, cont = 0;
+    int vetorAux[1];
+    int i, contadorGeral = 0, k = 0,x = 0,j =0, cont = 0;
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
 
@@ -420,41 +409,43 @@ No* montarListaEncadeadaComCabecote(){
         return NULL;
 
     for(i=0; i<10;i++)
-        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i);
+        contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0;
     
     vetorAux[contadorGeral];
 
     for(k=0;k<10;k++)
-        for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
+        for(j=0; j<getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0 ;j++)
             for(i=x;i<contadorGeral;i++){
                 vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
                 x++;
                 break;
             }
 
-    for(i=0;i<contadorGeral;i++){
-        if(inicio->prox == NULL){
-            novo = (No*) malloc(sizeof(No*));
-            inicio->prox = novo;
-            novo->conteudo = vetorAux[i];
-            novo->prox = NULL;
-            cont = 1;
-        }else{
-            novo = inicio;
-            while(novo->prox != NULL){
-                novo = novo->prox;
-            }
-            np = (No*) malloc(sizeof(No*));
-            np->conteudo = vetorAux[i];
-            np->prox = NULL;
-            novo->prox = np;
-        }
-    }
+    for(i = 0; i<contadorGeral;i++)
+        printf("{%d\n", vetorAux[0]);
+    // for(i=0;i<contadorGeral;i++){
+    //     if(inicio->prox == NULL){
+    //         novo = (No*) malloc(sizeof(No*));
+    //         inicio->prox = novo;
+    //         novo->conteudo = vetorAux[i];
+    //         novo->prox = NULL;
+    //         cont = 1;
+    //     }else{
+    //         novo = inicio;
+    //         while(novo->prox != NULL){
+    //             novo = novo->prox;
+    //         }
+    //         np = (No*) malloc(sizeof(No*));
+    //         np->conteudo = vetorAux[i];
+    //         np->prox = NULL;
+    //         novo->prox = np;
+    //     }
+    // }
 
-    if(cont !=0)
-        return inicio;
-    else
-        return NULL;
+    // if(cont !=0)
+         return inicio;
+    // else
+    //     return NULL;
 }
 
 void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
@@ -465,7 +456,6 @@ void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
         aux = inicio;
         while(aux != NULL){
             vetorAux[i] = aux->conteudo;
-            printf("%d ->",vetorAux[i]);
             i++;
             aux = aux->prox;
         }
