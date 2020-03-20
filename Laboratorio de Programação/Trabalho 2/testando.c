@@ -396,8 +396,6 @@ int  excluirNumeroDoFinaldaEstrutura(int posicao){
 }
 
 No* montarListaEncadeadaComCabecote(){
-
-    int vetorAux[1];
     int i, contadorGeral = 0, k = 0,x = 0,j =0, cont = 0;
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
@@ -411,41 +409,39 @@ No* montarListaEncadeadaComCabecote(){
     for(i=0; i<10;i++)
         contadorGeral += getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0;
     
-    vetorAux[contadorGeral];
+    int vetorAux[contadorGeral];
 
     for(k=0;k<10;k++)
-        for(j=0; j<getQuantidadeElementosEstruturaAuxiliar(i) > 0 ? getQuantidadeElementosEstruturaAuxiliar(i) : 0 ;j++)
+        for(j=0; j< getQuantidadeElementosEstruturaAuxiliar(k) > 0 ? getQuantidadeElementosEstruturaAuxiliar(k) : 0 ;j++)
             for(i=x;i<contadorGeral;i++){
                 vetorAux[i] = ptrListaPrincipal[k].listaAuxiliar[j];
                 x++;
                 break;
             }
 
-    for(i = 0; i<contadorGeral;i++)
-        printf("{%d\n", vetorAux[0]);
-    // for(i=0;i<contadorGeral;i++){
-    //     if(inicio->prox == NULL){
-    //         novo = (No*) malloc(sizeof(No*));
-    //         inicio->prox = novo;
-    //         novo->conteudo = vetorAux[i];
-    //         novo->prox = NULL;
-    //         cont = 1;
-    //     }else{
-    //         novo = inicio;
-    //         while(novo->prox != NULL){
-    //             novo = novo->prox;
-    //         }
-    //         np = (No*) malloc(sizeof(No*));
-    //         np->conteudo = vetorAux[i];
-    //         np->prox = NULL;
-    //         novo->prox = np;
-    //     }
-    // }
+    for(i=0;i<contadorGeral;i++){
+        if(inicio->prox == NULL){
+            novo = (No*) malloc(sizeof(No*));
+            inicio->prox = novo;
+            novo->conteudo = vetorAux[i];
+            novo->prox = NULL;
+            cont = 1;
+        }else{
+            novo = inicio;
+            while(novo->prox != NULL){
+                novo = novo->prox;
+            }
+            np = (No*) malloc(sizeof(No*));
+            np->conteudo = vetorAux[i];
+            np->prox = NULL;
+            novo->prox = np;
+        }
+    }
 
-    // if(cont !=0)
-         return inicio;
-    // else
-    //     return NULL;
+    if(cont !=0)
+        return inicio;
+    else
+        return NULL;
 }
 
 void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
@@ -453,7 +449,7 @@ void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
     int i=0;
 
     if(inicio != NULL){
-        aux = inicio;
+        aux = inicio->prox;
         while(aux != NULL){
             vetorAux[i] = aux->conteudo;
             i++;
@@ -462,19 +458,22 @@ void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
     }else{
         printf("Lista vazia");
     }
+
+    for(i=0;i<10;i++)
+        printf("vet[%d]: %d\n",i,vetorAux[i]);
 }
 
 void destruirListaEncadeadaComCabecote(No* inicio){
-   No *aux;
+   No *aux;    
 
-   if(inicio !=NULL){
-       aux = inicio;
-       while(aux != NULL){
-           aux = inicio->prox;
-           free(inicio);
-           inicio = aux;
-       }
-   }
+//    if(inicio !=NULL){
+//        aux = inicio;
+//        while(aux != NULL){
+//            aux = inicio->prox;
+//            free(inicio);
+//            inicio = aux;
+//        }
+//    }
 
 }
 
