@@ -3,21 +3,49 @@
 #define TAM 10
 #include "EstruturaVetores.h"
 
-// typedef struct{
-// 	int conteudo;
-//     struct No *prox;
-// } No;
+
+
+// #################################################
+//  Instituto Federal da Bahia
+//  Salvador - BA
+//  Curso de Análise e Desenvolvimento de Sistemas http://ads.ifba.edu.br
+//  Disciplina: INF029 - Laboratório de Programação
+//  Professor: Renato Novais - renato@ifba.edu.br
+
+//  ----- Orientações gerais -----
+//  Descrição: esse arquivo deve conter as questões do trabalho do aluno.
+//  Cada aluno deve renomear esse arquivo para Aluno<MATRICULA>.c
+//  O aluno deve preencher seus dados abaixo, e implementar as questões do trabalho
+
+//  ----- Dados do Aluno -----
+//  Nome:João Pedro dos Santos Gonçalves
+//  email:contato.jpsg@gmail.com
+//  Matrícula: 2019116018
+//  Semestre: 2º
+
+//  Copyright © 2016 Renato Novais. All rights reserved.
+// Última atualização: 20/06/2018 - 19/08/2016
+
+// #################################################
+
+
+
 
 typedef struct{
     int *listaAuxiliar;
     int *cont, *tamanho; 
 } ListaAux;
 
+void dobrar(int *x){
+    *x = *x * 2;
+}
+
 ListaAux vetorPrincipal[TAM];
 
-void inicializar(){ //OK
+void inicializar(){
     int i;
     ListaAux vetor[TAM];
+
     for(i=0;i<TAM;i++){
         vetor[i].listaAuxiliar = NULL;
         vetor[i].tamanho = 0;
@@ -65,8 +93,8 @@ int verificaEstrutura(int tamanho, ListaAux *ptrLista){
 int criarEstruturaAuxiliar(int tamanho, int posicao){
     int verificaE, retorno = 0;
     ListaAux *ptrListaPrincipal = NULL;
-    ptrListaPrincipal = &vetorPrincipal[posicao]; //FAZER PONTEIRO APONTAR PARA O ENDEREÇO DA POSICAO DO VETOR QUE EU QUERO ACESSAR
-    
+    ptrListaPrincipal = &vetorPrincipal[posicao]; 
+
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(tamanho>0)
             verificaE = verificaEstrutura(tamanho, ptrListaPrincipal);
@@ -83,17 +111,6 @@ int criarEstruturaAuxiliar(int tamanho, int posicao){
         retorno = JA_TEM_ESTRUTURA_AUXILIAR;
     else
         retorno = SEM_ESPACO_DE_MEMORIA;
-
-    // a posicao pode já existir estrutura auxiliar
-    //retorno = JA_TEM_ESTRUTURA_AUXILIAR;
-    // se posição é um valor válido {entre 1 e 10}
-    //retorno = POSICAO_INVALIDA;
-    // o tamanho ser muito grande
-    //retorno = SEM_ESPACO_DE_MEMORIA;
-    // o tamanho nao pode ser menor que 1
-    //retorno = TAMANHO_INVALIDO;
-    // deu tudo certo, crie
-    //retorno = SUCESSO;
 
     return retorno;
 
@@ -157,7 +174,6 @@ int inserirNumeroEmEstrutura(int valor, int posicao){
     if (posicao_invalida != SUCESSO)
         retorno = POSICAO_INVALIDA;
     else{
-        // testar se existe a estrutura auxiliar
         if (existeEstruturaAuxiliar == JA_TEM_ESTRUTURA_AUXILIAR){
           if (temEspaco == SUCESSO){
               ptrListaPrincipal->listaAuxiliar[ptrContador] = valor;
@@ -189,25 +205,21 @@ void selectionSort(int lista[], int n){
             lista[menor] = troca;
         }
     }
-
-    // printf("Pegando lista auxiliar ordenada: ");
-    // for(i=0;i<n;i++)
-    //     printf("%d ",lista[i]);
 }
 
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
 
-    int retorno = 0, j;
+    int retorno = 0, j, tj;
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal;
 
-    int tamEstruturaAuxiliar = ptrListaPrincipal[posicao].cont;
+    int len = sizeof(vetorAux)/sizeof(vetorAux[0]);
 
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
-            for(j=0;j<tamEstruturaAuxiliar;j++)
-                vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j];
-
+           for(j=0;j<len;j++)
+                vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
+            
             retorno = SUCESSO;
         }else{
             retorno = SEM_ESTRUTURA_AUXILIAR;
@@ -252,9 +264,6 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]){
 
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
-            // tj = ptrListaPrincipal[posicao].cont;
-            // vetorAux[tj];
-
             int len = sizeof(vetorAux)/sizeof(int);
 
             for(j=0;j<len;j++)
@@ -287,7 +296,7 @@ int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[]){
     else
         retorno = SUCESSO;
     
-    vetorAux[contadorGeral]; //É O MESMO QUE DAR UM MALLOC?
+    vetorAux[contadorGeral]; 
 
     for(k=0;k<10;k++)
         for(j=0;j<getQuantidadeElementosEstruturaAuxiliar(k);j++)
@@ -319,7 +328,7 @@ int excluirNumeroEspecificoDeEstrutura(int valor, int posicao){
   ListaAux *ptrListaPrincipal = NULL;
   ptrListaPrincipal = &vetorPrincipal;
 
-  while (i<ptrListaPrincipal->tamanho && encontrado == 0){
+  while (i < ptrListaPrincipal->tamanho && encontrado == 0){
       if(ptrListaPrincipal[posicao].listaAuxiliar[i] == valor){
           encontrado = 1;
           ptrListaPrincipal->cont = (subtracao - encontrado);
@@ -460,23 +469,23 @@ void getDadosListaEncadeadaComCabecote(No* inicio, int vetorAux[]){
         printf("vet[%d]: %d\n",i,vetorAux[i]);
 }
 
-void destruirListaEncadeadaComCabecote(No** inicio){
-   No *aux = inicio;  
+void destruirListaEncadeadaComCabecote(No* inicio){
+    // No *elemento = *inicio;
+    // No *auxiliar = NULL;
 
-    while((*inicio)->prox != NULL){
-        printf("-> %d\n", (*inicio)->prox->conteudo);
-        aux = (*inicio)->prox;
-        free(*inicio);
-        printf("free\n");
-        *inicio = aux;
-    }
-
-    *inicio = NULL;
+    // whille(elemento != NULL){
+    //     auxiliar = elemento->prox;
+    //     free(elemento);
+    //     elemento = auxiliar;
+    // }
+    // *inicio = NULL;
 }
+
 
 void finalizar(){
-    int i;
-    for(i = 0; i < TAM; i += 1)
-        free(vetorPrincipal[i].listaAuxiliar);
-}
+    // int i;
 
+    // for(i = 0; i < TAM; i += 1)
+    //     free(vetorPrincipal[i].listaAuxiliar);
+    // free(vetorPrincipal);
+}

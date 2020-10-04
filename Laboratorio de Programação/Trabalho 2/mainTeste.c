@@ -1,4 +1,4 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "EstruturaVetores.h"
@@ -203,7 +203,7 @@ Rertono (int)
 */
 void testeMudarTamanhoEstrutura(){
     show_log("testeMudarTamanhoEstrutura()");
-    int vet[2];
+    int vet[1];
     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -3) == NOVO_TAMANHO_INVALIDO);
     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, -4) == NOVO_TAMANHO_INVALIDO);
     printf("%d\n",modificarTamanhoEstruturaAuxiliar(11, 7) == POSICAO_INVALIDA);
@@ -216,7 +216,7 @@ void testeMudarTamanhoEstrutura(){
     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
     printf("%d\n",vet[0] == 3);
 
-    // //modificar para tamanho de 1 para 4
+    //modificar para tamanho de 1 para 4
     printf("%d\n",modificarTamanhoEstruturaAuxiliar(2, 3) == SUCESSO);
     printf("%d\n",getQuantidadeElementosEstruturaAuxiliar(2) == 1);
     printf("%d\n",getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
@@ -251,7 +251,7 @@ void testeListaEncadeada(){
     printf("%d\n",vet[8] == 27);
     printf("%d\n",vet[9] == -6);
 
-    destruirListaEncadeadaComCabecote(inicio);
+    destruirListaEncadeadaComCabecote(&inicio);
 
     printf("%d\n",inicio == NULL);
 

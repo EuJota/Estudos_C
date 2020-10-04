@@ -65,7 +65,7 @@ int verificaEstrutura(int tamanho, ListaAux *ptrLista){
 int criarEstruturaAuxiliar(int tamanho, int posicao){
     int verificaE, retorno = 0;
     ListaAux *ptrListaPrincipal = NULL;
-    ptrListaPrincipal = &vetorPrincipal[posicao]; //FAZER PONTEIRO APONTAR PARA O ENDEREÇO DA POSICAO DO VETOR QUE EU QUERO ACESSAR
+    ptrListaPrincipal = &vetorPrincipal[posicao];
     
     if(ehPosicaoValida(posicao) == SUCESSO)
         if(tamanho>0)
@@ -108,7 +108,7 @@ int getQuantidadeElementosEstruturaAuxiliar(int posicao){
     if(ehPosicaoValida(posicao+1) == SUCESSO)
         if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR)
             if(ptrListaPrincipal->cont > 0)
-                retorno = ptrListaPrincipal->cont;
+                retorno = (int) ptrListaPrincipal->cont;
             else
                 retorno = ESTRUTURA_AUXILIAR_VAZIA;
         else
@@ -127,7 +127,7 @@ int verificarTamanhoEstruturaAuxiliar(int posicao){
 
     contador = getQuantidadeElementosEstruturaAuxiliar(posicao);
     
-    tamanho = ptrListaPrincipal->tamanho;
+    tamanho = (int) ptrListaPrincipal->tamanho;
     tamanhoEstrutura = tamanho - contador;
 
     if(tamanhoEstrutura>0)
@@ -146,7 +146,7 @@ int inserirNumeroEmEstrutura(int valor, int posicao){
 
     ListaAux *ptrListaPrincipal = NULL;
     ptrListaPrincipal = &vetorPrincipal[posicao];
-    ptrContador = ptrListaPrincipal->cont;
+    ptrContador = (int) ptrListaPrincipal->cont;
 
     posicao_invalida = ehPosicaoValida(posicao);
     existeEstruturaAuxiliar = verificarEstruturaAuxiliar(posicao);
@@ -189,10 +189,6 @@ void selectionSort(int lista[], int n){
             lista[menor] = troca;
         }
     }
-
-    // printf("Pegando lista auxiliar ordenada: ");
-    // for(i=0;i<n;i++)
-    //     printf("%d ",lista[i]);
 }
 
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[]){
@@ -255,7 +251,7 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[]){
             // tj = ptrListaPrincipal[posicao].cont;
             // vetorAux[tj];
 
-            int len = sizeof(vetorAux)/sizeof(int);
+            int len = (int) sizeof(vetorAux)/sizeof(int);
 
             for(j=0;j<len;j++)
                 vetorAux[j] = ptrListaPrincipal[posicao].listaAuxiliar[j]; 
@@ -369,17 +365,17 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho){
 
 int  excluirNumeroDoFinaldaEstrutura(int posicao){
   int retorno = SUCESSO;
-  int i, encontrado = 0, subtracao = 1, contatual = 0;
+  int i, encontrado = 0, subtracao = 1, contAtual = 0;
 
   ListaAux *ptrListaPrincipal = NULL;
   ptrListaPrincipal = &vetorPrincipal;
 
-  contatual = ptrListaPrincipal[posicao].cont;
+  contAtual = (int) ptrListaPrincipal[posicao].cont;
   
   if(ehPosicaoValida(posicao) == SUCESSO)
     if(verificarEstruturaAuxiliar(posicao) == JA_TEM_ESTRUTURA_AUXILIAR){
         if(getQuantidadeElementosEstruturaAuxiliar(posicao) >= 0){
-            ptrListaPrincipal[posicao].cont = contatual - subtracao;
+            ptrListaPrincipal[posicao].cont = contAtual - subtracao;
             retorno = SUCESSO;
         }else
             return ESTRUTURA_AUXILIAR_VAZIA;
@@ -478,5 +474,6 @@ void finalizar(){
     int i;
     for(i = 0; i < TAM; i += 1)
         free(vetorPrincipal[i].listaAuxiliar);
+    //free(vetorPrincipal);
 }
 
