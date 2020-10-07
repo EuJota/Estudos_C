@@ -12,10 +12,13 @@ typedef struct cabo{
     struct cabo *prox;
 } Cabo;
 
-Cabo *inicializa();
-void imprimir();
-void adicionaCabo();
-Cabo *buscaCabo();
+// Cabo *inicializa();
+// void imprimir();
+// void adicionaCabo();
+// Cabo *buscaCabo();
+
+void ordenaCaboSequencial();
+Cabo formataCabo();
 
 
 int main(){
@@ -23,74 +26,119 @@ int main(){
     int posicao = 0;
     int a = 0;
     
-    cabo = inicializa(cabo);
+    // cabo = inicializa(cabo);
 
-    while(a<3){
-        adicionaCabo(cabo, a);
-        a++;
-    }
-    imprimir(cabo);
-    buscaCabo(cabo, 14);
+    // while(a<3){
+    //     adicionaCabo(cabo, a);
+    //     a++;
+    // }
+    // imprimir(cabo);
+    // buscaCabo(cabo, 14);
 
     return 0;
 }
 
-Cabo *inicializa(Cabo *cabecote) {
-    if(!cabecote)
-        cabecote = malloc(sizeof(Cabo));
+Cabo formataCabo(char *linha){
+    int i=0;
+    Cabo novoCabo;
+    // nome tamanho peso gc
+    while (linha[i] != '\0')
+    {
+        //splitar linha e colocar no array, trim, colocar cada posicao do array em uma propriedade do cabo
+        i++;
+    }
     
-    cabecote->prox = NULL;
-    return cabecote;
+    return novoCabo;
 }
 
-void adicionaCabo(Cabo *cabecote, int posicao){
+// Cabo *inicializa(Cabo *cabecote) {
+//     if(!cabecote)
+//         cabecote = malloc(sizeof(Cabo));
+    
+//     cabecote->prox = NULL;
+//     return cabecote;
+// }
+
+// ordena os cabos pelo gc
+void ordenaCaboSequencial(Cabo *cabecote, Cabo cabo){
     if(cabecote != NULL ){
-        int i = 0, j = 0;
         Cabo *novoCabo = malloc(sizeof(Cabo));
         Cabo *aux = cabecote;
-        while (aux != NULL || i<= posicao){
-            if(i==posicao){
-                Cabo *temporario = aux->prox;
-                scanf("%d",&j);
-                novoCabo->nome = j;
+
+        novoCabo->gc = cabo.gc;
+        novoCabo->nome = cabo.nome;
+        novoCabo->tamanho = cabo.tamanho;
+        novoCabo->peso = cabo.peso;
+
+        while (aux != NULL){
+            if(aux->prox == NULL) {
                 aux->prox = novoCabo;
-                novoCabo->prox = temporario;
+                novoCabo->prox = NULL;
                 break;
             }
-            aux = aux->prox;
-            i++;
-        }
-        //tratamento de posicao inexistente na lista
-    }else printf("Lista nao existe!!");
-}
-
-void removeCabo(){
-
-}
-
-//buscaCabo ptr porque vou usar a mesma funcao em remover, ai já retorno 
-//o ponteiro pra remover lá na funcao
-Cabo *buscaCabo(Cabo *cabecote, int nomeCabo){
-    if(cabecote != NULL){
-        Cabo *aux = cabecote;
-        bool encontrado = false;
-        
-        while (aux != NULL){
-            if(aux->nome == nomeCabo){
-                encontrado = true;
-                printf("Encontrado!!\n");
-                return aux;
+            else if(cabo.gc < aux->prox->gc){
+                aux->prox = novoCabo;
+                novoCabo->prox = aux->prox;
+                break;
             }
+            
             aux = aux->prox;
-        }
-        
-        if(!encontrado) printf("Não encontrado!!\n");
-    }else printf("Lista vazia\n");
-    return NULL;
+        }     
+    }else printf("Erro");
 }
 
-void imprimir(Cabo *cabecote){
-    Cabo *p;
-    for (p = cabecote->prox; p != NULL; p = p->prox)
-        printf ("%d\n", p->nome);
+void selectionSort(Cabo *cabecote){
+    
 }
+
+// void adicionaCabo(Cabo *cabecote, int posicao){
+//     if(cabecote != NULL ){
+//         int i = 0, j = 0;
+//         Cabo *novoCabo = malloc(sizeof(Cabo));
+//         Cabo *aux = cabecote;
+//         while (aux != NULL || i<= posicao){
+//             if(i==posicao){
+//                 Cabo *temporario = aux->prox;
+//                 scanf("%d",&j);
+//                 novoCabo->nome = j;
+//                 aux->prox = novoCabo;
+//                 novoCabo->prox = temporario;
+//                 break;
+//             }
+//             aux = aux->prox;
+//             i++;
+//         }
+//         //tratamento de posicao inexistente na lista
+//     }else printf("Lista nao existe!!");
+// }
+
+// void removeCabo(){
+
+// }
+
+// //buscaCabo ptr porque vou usar a mesma funcao em remover, ai já retorno 
+// //o ponteiro pra remover lá na funcao
+// Cabo *buscaCabo(Cabo *cabecote, int nomeCabo){
+//     if(cabecote != NULL){
+//         Cabo *aux = cabecote;
+//         bool encontrado = false;
+        
+//         while (aux != NULL){
+//             if(aux->nome == nomeCabo){
+//                 encontrado = true;
+//                 printf("Encontrado!!\n");
+//                 return aux;
+//             }
+//             aux = aux->prox;
+//         }
+        
+//         if(!encontrado) printf("Não encontrado!!\n");
+//     }else printf("Lista vazia\n");
+//     return NULL;
+// }
+
+// void imprimir(Cabo *cabecote){
+//     Cabo *p;
+//     for (p = cabecote->prox; p != NULL; p = p->prox)
+//         printf ("%d\n", p->nome);
+// }
